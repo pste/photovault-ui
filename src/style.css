@@ -206,6 +206,94 @@ body {
     background-color: rgba(0, 0, 0, 0.65);
 }
 
+/* ---------- gruppi di duplicati ---------- */
+
+.dup-card {
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.dup-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.dup-title {
+    font-weight: 600;
+}
+
+.dup-saving {
+    margin-left: auto;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* I membri scorrono in orizzontale: un gruppo può averne parecchi, e mandarli
+   a capo spezzerebbe il confronto visivo affiancato. */
+.dup-members {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.dup-member {
+    flex: 0 0 11rem;
+    border: 2px solid transparent;
+    border-radius: var(--p-content-border-radius);
+    padding: 0.4rem;
+    background-color: var(--p-content-hover-background);
+}
+
+.dup-member.is-keeper {
+    border-color: var(--p-primary-color);
+}
+
+.dup-member img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    display: block;
+    background-color: var(--p-content-background);
+    border-radius: calc(var(--p-content-border-radius) / 2);
+}
+
+.dup-info {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+}
+
+.dup-meta {
+    min-width: 0;
+    font-size: 0.78rem;
+}
+
+.dup-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dup-path,
+.dup-numbers {
+    opacity: 0.65;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dup-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
 /* ---------- lightbox ---------- */
 
 .lightbox-body {

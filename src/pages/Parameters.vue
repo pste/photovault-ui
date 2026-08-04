@@ -15,6 +15,7 @@ const fields = [
     { key: 'thumb_medium_px', label: 'Thumbnail visore (px)', type: 'number' },
     { key: 'clip_min_score', label: 'Soglia minima CLIP', type: 'number' },
     { key: 'dedup_max_distance', label: 'Distanza massima duplicati', type: 'number' },
+    { key: 'trash_retention_days', label: 'Giorni di permanenza nel cestino', type: 'number' },
     { key: 'page_size', label: 'Elementi per pagina', type: 'number' },
 ];
 

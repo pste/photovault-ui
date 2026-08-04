@@ -35,19 +35,34 @@ src/
 │   ├── MediaGrid.vue      griglia condivisa da Browse e Search, con infinite scroll
 │   ├── MediaTile.vue      singolo media, img loading="lazy"
 │   ├── Lightbox.vue       Dialog maximizable, non è una rotta
+│   ├── DupGroupCard.vue   gruppo di duplicati, con scelta del file da tenere
 │   └── StorageBanner.vue  avviso quando la share non risponde
 ├── pages/
 │   ├── Browse.vue         /  e  /folder/:folderId — esploratore cartelle
 │   ├── Search.vue         /search
+│   ├── Duplicates.vue     /duplicates
+│   ├── Trash.vue          /trash
 │   ├── Jobs.vue           /jobs
 │   └── Parameters.vue     /parameters
-├── stores/                browse, search, jobs, parameters, storage, errors, loading
+├── stores/                browse, search, duplicates, trash, jobs, parameters,
+│                          storage, errors, loading
 ├── composables/           useInfiniteScroll
 └── plugins/               index (registerPlugins), pinia, router, api, toast, logger
 ```
 
-Da aggiungere nelle fasi successive: `Duplicates.vue` con il relativo store, `TagChips.vue`
-per la gestione manuale dei tag, e l'albero cartelle lazy nel menu laterale.
+Da aggiungere nelle fasi successive: `TagChips.vue` per la gestione manuale dei tag e
+l'albero cartelle lazy nel menu laterale.
+
+### Duplicati e cestino
+
+`Duplicates.vue` mostra un gruppo per scheda, coi membri affiancati e scorrevoli in
+orizzontale: mandarli a capo spezzerebbe il confronto visivo, che è tutto il punto della
+pagina. Il file da tenere è preselezionato secondo la proposta dell'API (più pixel, poi file
+più grande, poi il più vecchio), ma resta una **proposta**: la scelta finale è un radio button.
+
+Cestinare non cancella. `Trash.vue` mostra cosa c'è nel cestino e quanti giorni mancano allo
+svuotamento automatico, così un ripensamento è sempre possibile finché il contatore non
+arriva a zero.
 
 ## Convenzioni
 

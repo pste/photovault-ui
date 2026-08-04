@@ -6,6 +6,8 @@ const route = useRoute();
 const links = [
     { name: 'browse', label: 'Sfoglia', icon: 'pi pi-folder' },
     { name: 'search', label: 'Ricerca', icon: 'pi pi-search' },
+    { name: 'duplicates', label: 'Duplicati', icon: 'pi pi-clone' },
+    { name: 'trash', label: 'Cestino', icon: 'pi pi-trash' },
     { name: 'jobs', label: 'Job', icon: 'pi pi-server' },
     { name: 'parameters', label: 'Impostazioni', icon: 'pi pi-cog' },
 ];
