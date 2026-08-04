@@ -1,0 +1,263 @@
+body {
+    margin: 0;
+    font-family: Inter var, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+                 Helvetica, Arial, sans-serif;
+    background-color: var(--p-content-background);
+    color: var(--p-text-color);
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+/* ---------- struttura della shell ---------- */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.app-side {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    width: 15rem;
+    flex-shrink: 0;
+    border-right: 1px solid var(--p-content-border-color);
+    background-color: var(--p-content-background);
+    overflow-y: auto;
+}
+
+.app-main {
+    flex: 1;
+    min-width: 0; /* senza questo la griglia allarga il flex invece di andare a capo */
+    display: flex;
+    flex-direction: column;
+}
+
+.app-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--p-content-border-color);
+    background-color: var(--p-content-background);
+}
+
+.app-content {
+    padding: 1rem;
+}
+
+/* ---------- menu laterale ---------- */
+
+.side-title {
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.side-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+}
+
+.side-link:hover {
+    background-color: var(--p-content-hover-background);
+}
+
+.side-link.is-active {
+    border-left-color: var(--p-primary-color);
+    background-color: var(--p-highlight-background);
+    font-weight: 600;
+}
+
+/* ---------- griglie ---------- */
+
+/* Condivisa da cartelle e media: una sola definizione, due usi. */
+.tile-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+}
+
+.tile-grid > * {
+    min-width: 0;
+}
+
+.section-title {
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+}
+
+/* ---------- tile cartella ---------- */
+
+.folder-tile {
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+    overflow: hidden;
+    background-color: var(--p-content-background);
+}
+
+.folder-tile:hover {
+    border-color: var(--p-primary-color);
+}
+
+/* Mosaico 2x2 delle prime quattro anteprime: e' il dettaglio che fa sembrare
+   un'app per foto invece di un file manager. */
+.folder-mosaic {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    aspect-ratio: 1;
+    background-color: var(--p-content-border-color);
+}
+
+.folder-mosaic-cell {
+    overflow: hidden;
+    background-color: var(--p-content-hover-background);
+}
+
+.folder-mosaic-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Una sola anteprima occupa tutto il riquadro. */
+.folder-mosaic.is-single {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.folder-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    font-size: 2.5rem;
+    opacity: 0.35;
+}
+
+.folder-caption {
+    padding: 0.5rem;
+}
+
+.folder-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.folder-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* ---------- tile media ---------- */
+
+.media-tile {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--p-content-border-radius);
+    overflow: hidden;
+    background-color: var(--p-content-hover-background);
+}
+
+.media-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.media-tile:hover img {
+    opacity: 0.85;
+}
+
+.media-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 1.75rem;
+    opacity: 0.35;
+}
+
+.media-badge {
+    position: absolute;
+    right: 0.35rem;
+    bottom: 0.35rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.75rem;
+    font-size: 0.72rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
+/* ---------- lightbox ---------- */
+
+.lightbox-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #000;
+}
+
+.lightbox-body img,
+.lightbox-body video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.lightbox-info {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+}
+
+.lightbox-info dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1rem;
+    margin: 0;
+}
+
+.lightbox-info dt {
+    opacity: 0.6;
+}
+
+.lightbox-info dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- varie ---------- */
+
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.sentinel {
+    height: 1px;
+}
+
+@media (max-width: 767px) {
+    .app-side {
+        display: none;
+    }
+}
