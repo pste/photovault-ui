@@ -85,10 +85,16 @@ const useBrowseStore = defineStore('browse', () => {
         total.value = Math.max(0, total.value - gone.size);
     }
 
+    // Come forget, per le cartelle appena cestinate.
+    function forgetFolders(folderIds) {
+        const gone = new Set(folderIds);
+        subfolders.value = subfolders.value.filter((f) => !gone.has(f.folder_id));
+    }
+
     return {
         roots, rootId, folder, breadcrumb, subfolders, media, total,
         hasMore, isEmpty,
-        loadRoots, open, loadMore, forget,
+        loadRoots, open, loadMore, forget, forgetFolders,
     };
 });
 

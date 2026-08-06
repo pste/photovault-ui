@@ -111,6 +111,17 @@ body {
     border-color: var(--p-primary-color);
 }
 
+/* position relative perche' .media-check, condivisa con le tile media, e'
+   posizionata in assoluto rispetto alla tile. */
+.folder-tile {
+    position: relative;
+}
+
+.folder-tile.is-selected {
+    border-color: var(--p-primary-color);
+    box-shadow: inset 0 0 0 2px var(--p-primary-color);
+}
+
 /* Mosaico 2x2 delle prime quattro anteprime: e' il dettaglio che fa sembrare
    un'app per foto invece di un file manager. */
 .folder-mosaic {
