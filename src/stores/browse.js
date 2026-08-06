@@ -75,9 +75,10 @@ const useBrowseStore = defineStore('browse', () => {
         applyPage(data, true);
     }
 
-    // I file cestinati spariscono subito dalla griglia, ma la riga in database
-    // resta finche' il job trashapply non ha davvero spostato il file: non si
-    // puo' quindi ricaricare dal server, perche' tornerebbero indietro.
+    // Toglie dalla lista i file appena cestinati, senza rifare la richiesta.
+    // L'API li escluderebbe comunque -- filtra le richieste di cestinamento
+    // ancora pendenti -- ma ricaricare una pagina da 200 media per far sparire
+    // due tile e' lavoro sprecato, e si vedrebbe.
     function forget(mediaIds) {
         const gone = new Set(mediaIds);
         media.value = media.value.filter((m) => !gone.has(m.media_id));

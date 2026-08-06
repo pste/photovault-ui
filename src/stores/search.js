@@ -56,8 +56,7 @@ const useSearchStore = defineStore('search', () => {
         ran.value = false;
     }
 
-    // Vedi browse.forget: la riga in database sopravvive al cestinamento finche'
-    // il job non ha spostato il file, quindi si toglie dalla lista locale.
+    // Vedi browse.forget: si toglie dalla lista locale invece di ricaricare.
     function forget(mediaIds) {
         const gone = new Set(mediaIds);
         media.value = media.value.filter((m) => !gone.has(m.media_id));

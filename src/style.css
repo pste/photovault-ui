@@ -370,6 +370,46 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* ---------- altri file ---------- */
+
+.ext-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ext-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.4rem 0.7rem;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+    background-color: var(--p-content-background);
+}
+
+.ext-chip:hover {
+    border-color: var(--p-primary-color);
+}
+
+.ext-chip span {
+    font-size: 0.8rem;
+    opacity: 0.65;
+}
+
+.other-path {
+    display: inline-block;
+    max-width: 40rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    opacity: 0.75;
+}
+
 /* ---------- varie ---------- */
 
 .empty-state {
