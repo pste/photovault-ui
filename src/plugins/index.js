@@ -2,6 +2,7 @@ import pinia from './pinia';
 import router from './router';
 import api from './api';
 import ToastService from './toast';
+import ConfirmationService from './confirm';
 //
 import PrimeVue from 'primevue/config';
 import 'primeflex/primeflex.css';
@@ -22,6 +23,7 @@ export function registerPlugins(app) {
     });
     app.directive('tooltip', Tooltip);
     app.use(ToastService);
+    app.use(ConfirmationService);
 
     app.use(router); // dopo pinia
     app.use(api);

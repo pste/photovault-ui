@@ -4,9 +4,11 @@ import { thumbURL } from '@/plugins/api';
 
 const props = defineProps({
     item: { type: Object, required: true },
+    selecting: { type: Boolean, default: false },
+    selected: { type: Boolean, default: false },
 });
 
-defineEmits(['open']);
+const emit = defineEmits(['open', 'toggle']);
 
 // La thumbnail esiste solo quando il job l'ha generata: finche' e' pendente si
 // mostra un segnaposto invece di un'immagine rotta.
@@ -21,10 +23,25 @@ const duration = computed(() => {
     const ss = String(total % 60).padStart(2, '0');
     return `${mm}:${ss}`;
 });
+
+// Fuori dalla modalita' selezione il clic singolo non fa niente: ad aprire e' il
+// doppio clic. Cosi' passare sulla griglia non spalanca il visore per sbaglio,
+// ed e' anche il comportamento del file manager.
+function onClick() {
+    if (props.selecting) {
+        emit('toggle', props.item);
+    }
+}
 </script>
 
 <template>
-    <div class="media-tile clickable" :title="item.file_name" @click="$emit('open', item)">
+    <div
+        class="media-tile"
+        :class="{ clickable: selecting, 'is-selected': selected }"
+        :title="item.file_name"
+        @click="onClick"
+        @dblclick="emit('open', item)"
+    >
         <img
             v-if="hasThumb"
             :src="thumbURL(item.media_id, 's', item.v)"
@@ -37,6 +54,10 @@ const duration = computed(() => {
         <div v-else class="media-placeholder">
             <i :class="item.media_kind === 'video' ? 'pi pi-video' : 'pi pi-image'"></i>
         </div>
+
+        <span v-if="selecting" class="media-check">
+            <i :class="selected ? 'pi pi-check-circle' : 'pi pi-circle'"></i>
+        </span>
 
         <span v-if="duration" class="media-badge">{{ duration }}</span>
     </div>

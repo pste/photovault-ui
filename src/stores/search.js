@@ -56,7 +56,15 @@ const useSearchStore = defineStore('search', () => {
         ran.value = false;
     }
 
-    return { filters, media, total, ran, hasMore, run, loadMore, reset };
+    // Vedi browse.forget: la riga in database sopravvive al cestinamento finche'
+    // il job non ha spostato il file, quindi si toglie dalla lista locale.
+    function forget(mediaIds) {
+        const gone = new Set(mediaIds);
+        media.value = media.value.filter((m) => !gone.has(m.media_id));
+        total.value = Math.max(0, total.value - gone.size);
+    }
+
+    return { filters, media, total, ran, hasMore, run, loadMore, reset, forget };
 });
 
 export default useSearchStore;

@@ -167,12 +167,50 @@ body {
 
 /* ---------- tile media ---------- */
 
+/* Barra sopra la griglia: selezione e azioni sui media scelti. */
+.grid-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.grid-toolbar-count {
+    margin-right: auto;
+    font-weight: 600;
+}
+
 .media-tile {
     position: relative;
     aspect-ratio: 1;
     border-radius: var(--p-content-border-radius);
     overflow: hidden;
     background-color: var(--p-content-hover-background);
+}
+
+/* Il riquadro sta dentro il bordo (inset) e non fuori: un outline vero
+   sposterebbe le tile vicine di due pixel a ogni selezione. */
+.media-tile.is-selected {
+    box-shadow: inset 0 0 0 3px var(--p-primary-color);
+}
+
+.media-tile.is-selected img {
+    opacity: 0.75;
+}
+
+.media-check {
+    position: absolute;
+    left: 0.35rem;
+    top: 0.35rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.55);
 }
 
 .media-tile img {

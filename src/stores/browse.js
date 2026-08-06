@@ -75,10 +75,19 @@ const useBrowseStore = defineStore('browse', () => {
         applyPage(data, true);
     }
 
+    // I file cestinati spariscono subito dalla griglia, ma la riga in database
+    // resta finche' il job trashapply non ha davvero spostato il file: non si
+    // puo' quindi ricaricare dal server, perche' tornerebbero indietro.
+    function forget(mediaIds) {
+        const gone = new Set(mediaIds);
+        media.value = media.value.filter((m) => !gone.has(m.media_id));
+        total.value = Math.max(0, total.value - gone.size);
+    }
+
     return {
         roots, rootId, folder, breadcrumb, subfolders, media, total,
         hasMore, isEmpty,
-        loadRoots, open, loadMore,
+        loadRoots, open, loadMore, forget,
     };
 });
 

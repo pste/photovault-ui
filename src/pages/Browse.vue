@@ -78,6 +78,7 @@ watch(folderId, (id) => browse.open(id), { immediate: true });
                 :has-more="browse.hasMore"
                 :on-load-more="browse.loadMore"
                 @open="openMedia"
+                @trashed="browse.forget"
             />
         </div>
 

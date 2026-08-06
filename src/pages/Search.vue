@@ -66,6 +66,7 @@ watch(() => route.query.q, runFromRoute);
             :has-more="search.hasMore"
             :on-load-more="search.loadMore"
             @open="openMedia"
+            @trashed="search.forget"
         />
 
         <div v-else-if="search.ran" class="empty-state">Nessun risultato.</div>
