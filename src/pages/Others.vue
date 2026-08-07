@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
+import { otherDownloadURL } from '@/plugins/api';
 import useOthersStore from '@/stores/others';
 
 const store = useOthersStore();
@@ -127,6 +128,14 @@ onMounted(() => store.load());
             </Column>
             <Column field="file_size" header="Dimensione" header-style="width: 8rem">
                 <template #body="{ data }">{{ formatSize(data.file_size) }}</template>
+            </Column>
+            <Column header="" header-style="width: 4rem">
+                <template #body="{ data }">
+                    <a :href="otherDownloadURL(data.other_id)" :download="data.file_name">
+                        <Button icon="pi pi-download" text rounded
+                                v-tooltip.bottom="'Scarica per vedere cos\'è'" />
+                    </a>
+                </template>
             </Column>
             <Column field="modified" header="Modificato" header-style="width: 9rem">
                 <template #body="{ data }">{{ formatDate(data.modified) }}</template>

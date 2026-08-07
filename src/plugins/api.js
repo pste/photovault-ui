@@ -66,6 +66,12 @@ export function originalURL(media_id) {
     return buildURL(`/media/${media_id}/original`);
 }
 
+// Scaricare un file non gestito e' l'unico modo per sapere cosa sia: la pagina
+// ne mostra percorso e dimensione, ma un .dat da 3 GB si giudica solo aprendolo.
+export function otherDownloadURL(other_id) {
+    return buildURL(`/others/${other_id}/download`);
+}
+
 export default {
     install: (app) => {
         app.provide('API', api);
