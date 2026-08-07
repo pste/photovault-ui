@@ -69,7 +69,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
 </script>
 
 <template>
-    <Dialog v-model:visible="visible" maximizable modal :header="detail?.file_name || ''" :style="{ width: '90vw', height: '90vh' }">
+    <!-- La misura sta in style.css e non qui: da telefono la finestra diventa
+         piena e la foto cede altezza ai dati, e una regola inline non potrebbe
+         cambiare al variare della larghezza. -->
+    <Dialog v-model:visible="visible" maximizable modal :header="detail?.file_name || ''" class="lightbox-dialog">
         <div class="flex flex-column h-full">
             <div class="lightbox-body flex-1">
                 <video v-if="isVideo" :src="originalURL(mediaId)" controls autoplay></video>

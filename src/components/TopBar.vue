@@ -3,10 +3,12 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useSearchStore from '@/stores/search';
 import useTheme from '@/composables/useTheme';
+import useNav from '@/composables/useNav';
 
 const router = useRouter();
 const searchStore = useSearchStore();
 const { isDark, toggle } = useTheme();
+const { open } = useNav();
 const text = ref('');
 
 function submit() {
@@ -21,6 +23,15 @@ function submit() {
 
 <template>
     <div class="app-top flex align-items-center gap-3">
+        <!-- Solo sotto i 768 px, dove il menu laterale non c'e'. -->
+        <Button
+            class="menu-toggle"
+            icon="pi pi-bars"
+            aria-label="Apri il menu"
+            text
+            rounded
+            @click="open"
+        />
         <IconField class="flex-1">
             <InputIcon class="pi pi-search" />
             <InputText

@@ -345,6 +345,11 @@ body {
 
 /* ---------- lightbox ---------- */
 
+.lightbox-dialog {
+    width: 90vw;
+    height: 90vh;
+}
+
 .lightbox-body {
     display: flex;
     align-items: center;
@@ -433,8 +438,59 @@ body {
     height: 1px;
 }
 
+/* Il pulsante del menu esiste solo dove il menu laterale non c'e'.
+   Il selettore e' discendente e non una classe sola perche' PrimeVue inietta i
+   suoi stili DOPO questo foglio: a parita' di specificita' vincerebbe il
+   display: inline-flex di .p-button, e il pulsante resterebbe visibile anche da
+   desktop -- verificato renderizzando a 1280 px. */
+.app-top .menu-toggle {
+    display: none;
+}
+
 @media (max-width: 767px) {
+    /* Il menu fisso ruberebbe 15rem su uno schermo che ne ha 24: sparisce, ma
+       non nel nulla -- lo stesso elenco vive nel pannello a scomparsa aperto da
+       .menu-toggle. Nasconderlo e basta, com'era prima, lasciava il telefono
+       senza alcuna navigazione. */
     .app-side {
         display: none;
+    }
+
+    .app-top .menu-toggle {
+        display: inline-flex;
+        flex-shrink: 0;
+    }
+
+    /* Tile piu' piccole: a 9rem su 24 di larghezza ne entrano due, e restano
+       due anche in orizzontale. A 7rem si passa a tre, e la griglia torna a
+       sembrare una griglia. */
+    .tile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+        gap: 0.5rem;
+    }
+
+    .app-content {
+        padding: 0.75rem 0.5rem;
+    }
+
+    /* Su un telefono i 20 px di margine attorno alla finestra non servono a
+       niente e li paga la foto: tanto vale prendersi lo schermo. */
+    .lightbox-dialog {
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    /* La foto cede altezza ai dati. Senza questo limite si prende tutto e i
+       metadati finiscono sotto il bordo: misurati 65 px di contenuto nascosto,
+       che si vedevano come un percorso di cartella tagliato a meta' senza
+       nessun indizio che ci fosse dell'altro. */
+    .lightbox-body {
+        max-height: 55vh;
+    }
+
+    .lightbox-info {
+        padding: 0.75rem 0.25rem;
     }
 }
