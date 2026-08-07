@@ -386,6 +386,24 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* ---------- cestino ---------- */
+
+.trash-thumb {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: calc(var(--p-content-border-radius) / 2);
+    display: block;
+}
+
+.trash-thumb.is-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--p-content-hover-background);
+    opacity: 0.5;
+}
+
 /* ---------- stats ---------- */
 
 .stat-summary {

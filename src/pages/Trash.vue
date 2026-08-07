@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted } from 'vue';
+import { thumbURL } from '@/plugins/api';
 import useTrashStore from '@/stores/trash';
 import useJobsStore from '@/stores/jobs';
 import useParametersStore from '@/stores/parameters';
@@ -66,6 +67,24 @@ onMounted(async () => {
         </Message>
 
         <DataTable :value="store.items" size="small" striped-rows>
+            <!-- L'anteprima resta sulla share per tutta la ritenzione: e' cosi'
+                 che si vede cosa si sta per buttare senza aprire il NAS. Manca
+                 per i file non gestiti e per le cartelle, che una thumbnail non
+                 ce l'hanno mai avuta. -->
+            <Column header="" style="width: 4rem">
+                <template #body="{ data }">
+                    <img
+                        v-if="data.media_id"
+                        class="trash-thumb"
+                        :src="thumbURL(data.media_id, 's')"
+                        alt=""
+                        @error="(e) => (e.target.style.display = 'none')"
+                    />
+                    <div v-else class="trash-thumb is-placeholder">
+                        <i :class="data.folder_id ? 'pi pi-folder' : 'pi pi-file'"></i>
+                    </div>
+                </template>
+            </Column>
             <Column header="File">
                 <template #body="{ data }">
                     <div>{{ data.original_path }}</div>
