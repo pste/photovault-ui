@@ -386,6 +386,15 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* ---------- tag ---------- */
+
+/* Un tag bloccato e' una lapide: c'e', ma non partecipa piu'. Il barrato lo dice
+   senza bisogno di leggere l'etichetta accanto. */
+.is-blocked {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
 /* ---------- altri file ---------- */
 
 .ext-chips {

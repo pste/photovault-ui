@@ -10,6 +10,7 @@ const links = [
     { name: 'duplicates', label: 'Duplicati', icon: 'pi pi-clone' },
     { name: 'others', label: 'Altri file', icon: 'pi pi-file' },
     { name: 'trash', label: 'Cestino', icon: 'pi pi-trash' },
+    { name: 'tags', label: 'Tag', icon: 'pi pi-tags' },
     { name: 'jobs', label: 'Job', icon: 'pi pi-server' },
     { name: 'parameters', label: 'Impostazioni', icon: 'pi pi-cog' },
 ];

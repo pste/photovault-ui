@@ -5,6 +5,7 @@ import SearchView from '@/pages/Search.vue';
 import DuplicatesView from '@/pages/Duplicates.vue';
 import TrashView from '@/pages/Trash.vue';
 import OthersView from '@/pages/Others.vue';
+import TagsView from '@/pages/Tags.vue';
 import JobsView from '@/pages/Jobs.vue';
 import ParametersView from '@/pages/Parameters.vue';
 
@@ -19,6 +20,7 @@ const router = createRouter({
         { path: '/duplicates', name: 'duplicates', component: DuplicatesView },
         { path: '/others', name: 'others', component: OthersView },
         { path: '/trash', name: 'trash', component: TrashView },
+        { path: '/tags', name: 'tags', component: TagsView },
         { path: '/jobs', name: 'jobs', component: JobsView },
         { path: '/parameters', name: 'parameters', component: ParametersView },
     ],
