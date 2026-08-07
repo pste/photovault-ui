@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import useDuplicatesStore from '@/stores/duplicates';
 import DupGroupCard from '@/components/DupGroupCard.vue';
+import LivePhotoPanel from '@/components/LivePhotoPanel.vue';
 
 const store = useDuplicatesStore();
 const toast = useToast();
@@ -46,6 +47,11 @@ onMounted(() => store.load());
 
 <template>
     <div>
+        <!-- Sopra i duplicati veri: e' la stessa domanda -- lo stesso contenuto
+             occupa due posti -- ma la risposta e' diversa, perche' qui il
+             secondo file non e' una copia, e' il movimento. -->
+        <LivePhotoPanel />
+
         <div class="flex align-items-center gap-3 mb-3 flex-wrap">
             <SelectButton
                 :model-value="store.status"

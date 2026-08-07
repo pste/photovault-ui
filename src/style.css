@@ -386,6 +386,82 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* ---------- live photo ---------- */
+
+.live-panel {
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.25rem;
+    background-color: var(--p-content-background);
+}
+
+.live-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.live-head > .pi-bolt {
+    font-size: 1.4rem;
+    color: var(--p-primary-color);
+}
+
+.live-title {
+    font-weight: 600;
+}
+
+.live-note {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    max-width: 46rem;
+}
+
+.live-preview {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+    margin-top: 1rem;
+}
+
+.live-pair img,
+.live-pair-empty {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: calc(var(--p-content-border-radius) / 2);
+    display: block;
+}
+
+.live-pair-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--p-content-hover-background);
+    opacity: 0.4;
+}
+
+.live-pair-name {
+    font-size: 0.78rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.live-pair-meta {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.live-pair-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
 /* ---------- cestino ---------- */
 
 .trash-thumb {
