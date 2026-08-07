@@ -4,9 +4,22 @@ import useJobsStore from '@/stores/jobs';
 
 const jobsStore = useJobsStore();
 
-// I nomi corrispondono agli handler dei pod: scan/fullscan/thumbs stanno nel pod
-// Go, dedup nel pod dedup, label nel pod Python.
-const runnable = ['scan', 'fullscan', 'thumbs', 'dedup', 'label'];
+// I nomi devono corrispondere **esattamente** agli handler dei pod, altrimenti
+// il job resta pending per sempre: nessun pod lo reclama, perche' il claim
+// filtra per i nomi che sa eseguire, e in pagina compare una riga che non parte
+// mai senza spiegare perche'.
+//
+// C'erano due nomi inventati: "fullscan", che non e' mai esistito, e "label",
+// mentre il pod Python espone "places". Verificati uno per uno leggendo i tre
+// main dei pod.
+const runnable = [
+    'scan',       // pod scan: cammina la share e scrive le righe
+    'thumbs',     // pod scan: genera le anteprime
+    'livephoto',  // pod scan: riaccoppia foto e video delle Live Photo
+    'dedup',      // pod dedup: sha256 + dHash + gruppi
+    'dhash',      // pod dedup: solo dHash + gruppi, senza leggere gli originali
+    'places',     // pod label: toponimi da GPS e nome cartella
+];
 
 const severity = {
     pending: 'secondary',
