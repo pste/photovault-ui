@@ -29,24 +29,30 @@ src/
 ├── App.vue                shell: SideMenu + TopBar + RouterView + Toast
 ├── style.css              layout della shell e classi condivise
 ├── components/
-│   ├── SideMenu.vue       menu verticale fisso a sinistra
-│   ├── TopBar.vue         barra di ricerca sempre visibile
+│   ├── SideMenu.vue       menu fisso a sinistra + Drawer sotto i 768 px
+│   ├── MenuLinks.vue      le voci di menu, usate da entrambi i contenitori
+│   ├── TopBar.vue         ricerca, tema chiaro/scuro, pulsante del menu da telefono
 │   ├── FolderTile.vue     tile cartella con mosaico 2x2 delle prime 4 thumbnail
 │   ├── MediaGrid.vue      griglia condivisa da Browse e Search, con infinite scroll
 │   ├── MediaTile.vue      singolo media, img loading="lazy"
 │   ├── Lightbox.vue       Dialog maximizable, non è una rotta
 │   ├── DupGroupCard.vue   gruppo di duplicati, con scelta del file da tenere
+│   ├── LivePhotoPanel.vue coppie foto/video, con "cestina i video, tieni le foto"
+│   ├── SelectionBar.vue   barra della selezione multipla
 │   └── StorageBanner.vue  avviso quando la share non risponde
 ├── pages/
 │   ├── Browse.vue         /  e  /folder/:folderId — esploratore cartelle
 │   ├── Search.vue         /search
 │   ├── Duplicates.vue     /duplicates
+│   ├── Others.vue         /others — file che photovault non gestisce
 │   ├── Trash.vue          /trash
+│   ├── Tags.vue           /tags — rinomina, fusione, categoria, blocco
+│   ├── Stats.vue          /stats — avanzamento della pipeline, con le barre
 │   ├── Jobs.vue           /jobs
 │   └── Parameters.vue     /parameters
-├── stores/                browse, search, duplicates, trash, jobs, parameters,
-│                          storage, errors, loading
-├── composables/           useInfiniteScroll
+├── stores/                browse, search, duplicates, trash, others, tags, jobs,
+│                          parameters, storage, errors, loading
+├── composables/           useInfiniteScroll, useSelection, useTheme, useNav
 └── plugins/               index (registerPlugins), pinia, router, api, toast, logger
 ```
 
