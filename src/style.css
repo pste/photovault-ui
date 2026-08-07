@@ -386,6 +386,68 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* ---------- stats ---------- */
+
+.stat-summary {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+    background-color: var(--p-content-background);
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.stat-value.is-warn {
+    color: var(--p-red-400);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.stat-row {
+    margin-bottom: 1.25rem;
+}
+
+.stat-row-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.stat-row-label {
+    font-weight: 600;
+}
+
+.stat-row-numbers {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+}
+
+.stat-row-error {
+    color: var(--p-red-400);
+}
+
+.stat-row-note {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    opacity: 0.55;
+}
+
 /* ---------- tag ---------- */
 
 /* Un tag bloccato e' una lapide: c'e', ma non partecipa piu'. Il barrato lo dice

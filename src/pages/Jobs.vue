@@ -1,10 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import useJobsStore from '@/stores/jobs';
-import { api } from '@/plugins/api';
 
 const jobsStore = useJobsStore();
-const stats = ref(null);
 
 // I nomi corrispondono agli handler dei pod: scan/fullscan/thumbs stanno nel pod
 // Go, dedup nel pod dedup, label nel pod Python.
@@ -26,7 +24,6 @@ function formatDate(value) {
 
 async function refresh() {
     await jobsStore.load();
-    stats.value = await api.get('/stats');
 }
 
 onMounted(refresh);
@@ -45,15 +42,6 @@ onMounted(refresh);
                 @click="jobsStore.enqueue(name).then(refresh)"
             />
             <Button icon="pi pi-refresh" text @click="refresh" />
-        </div>
-
-        <div v-if="stats" class="mb-4 flex gap-4 flex-wrap">
-            <span>{{ stats.media_total }} media</span>
-            <span>{{ stats.videos }} video</span>
-            <span>thumbnail da fare: {{ stats.thumb_pending }}</span>
-            <span>hash da fare: {{ stats.hash_pending }}</span>
-            <span>tag da fare: {{ stats.label_pending }}</span>
-            <span v-if="stats.missing > 0">mancanti: {{ stats.missing }}</span>
         </div>
 
         <DataTable :value="jobsStore.jobs" size="small" striped-rows>
