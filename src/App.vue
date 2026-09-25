@@ -42,7 +42,11 @@ watch(() => errors.last, (err) => {
         <Toast />
     </template>
 
-    <div v-else class="app-shell">
+    <!-- v-else-if e non v-else: prima che il router risolva la prima rotta,
+         route non ha ancora ne' nome ne' meta, e la cornice si montava per un
+         attimo anche sulla pagina di login -- facendo partire, senza sessione,
+         il controllo della share del banner. -->
+    <div v-else-if="route.name" class="app-shell">
         <SideMenu />
 
         <div class="app-main">
