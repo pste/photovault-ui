@@ -153,7 +153,7 @@ onMounted(store.load);
                 </template>
             </Column>
 
-            <Column header="" style="width: 12rem">
+            <Column header="" header-class="col-w-12">
                 <template #body="{ data }">
                     <Button icon="pi pi-pencil" text rounded v-tooltip.bottom="'Rinomina o cambia categoria'"
                         @click="openEdit(data)" />
@@ -173,7 +173,7 @@ onMounted(store.load);
             </template>
         </DataTable>
 
-        <Dialog v-model:visible="editing" modal header="Modifica il tag" :style="{ width: '26rem' }">
+        <Dialog v-model:visible="editing" modal header="Modifica il tag" class="dialog-narrow">
             <div class="flex flex-column gap-3">
                 <div class="flex flex-column gap-1">
                     <label for="tag-nome">Nome visualizzato</label>
@@ -197,7 +197,7 @@ onMounted(store.load);
             </template>
         </Dialog>
 
-        <Dialog v-model:visible="merging" modal header="Fondi in un altro tag" :style="{ width: '26rem' }">
+        <Dialog v-model:visible="merging" modal header="Fondi in un altro tag" class="dialog-narrow">
             <div class="flex flex-column gap-3">
                 <p class="m-0">
                     Le {{ merging?.usage }} foto di <strong>{{ merging?.display_name }}</strong>

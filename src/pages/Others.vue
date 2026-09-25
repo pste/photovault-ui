@@ -107,20 +107,20 @@ onMounted(() => store.load());
             size="small"
             striped-rows
         >
-            <Column selection-mode="multiple" header-style="width: 3rem" />
+            <Column selection-mode="multiple" header-class="col-w-3" />
             <Column field="file_name" header="Nome" />
             <Column field="path" header="Cartella">
                 <template #body="{ data }">
                     <span class="other-path" :title="data.path">{{ data.path || '/' }}</span>
                 </template>
             </Column>
-            <Column field="ext" header="Tipo" header-style="width: 6rem">
+            <Column field="ext" header="Tipo" header-class="col-w-6">
                 <template #body="{ data }">.{{ data.ext }}</template>
             </Column>
-            <Column field="file_size" header="Dimensione" header-style="width: 8rem">
+            <Column field="file_size" header="Dimensione" header-class="col-w-8">
                 <template #body="{ data }">{{ formatSize(data.file_size) }}</template>
             </Column>
-            <Column header="" header-style="width: 4rem">
+            <Column header="" header-class="col-w-4">
                 <template #body="{ data }">
                     <a :href="otherDownloadURL(data.other_id)" :download="data.file_name">
                         <Button icon="pi pi-download" text rounded
@@ -128,7 +128,7 @@ onMounted(() => store.load());
                     </a>
                 </template>
             </Column>
-            <Column field="modified" header="Modificato" header-style="width: 9rem">
+            <Column field="modified" header="Modificato" header-class="col-w-9">
                 <template #body="{ data }">{{ formatDate(data.modified) }}</template>
             </Column>
         </DataTable>

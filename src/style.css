@@ -670,3 +670,43 @@ body {
         padding: 0.75rem 0.25rem;
     }
 }
+
+/* ---------- misure ricorrenti ---------- */
+
+/* La barra di caricamento in cima: il default di PrimeVue e' alto come un
+   campo di testo. */
+.app-progress {
+    height: 3px;
+}
+
+/* Larghezze fisse delle colonne delle tabelle, al posto di header-style. */
+.col-w-3 {
+    width: 3rem;
+}
+
+.col-w-4 {
+    width: 4rem;
+}
+
+.col-w-6 {
+    width: 6rem;
+}
+
+.col-w-8 {
+    width: 8rem;
+}
+
+.col-w-9 {
+    width: 9rem;
+}
+
+.col-w-12 {
+    width: 12rem;
+}
+
+/* Finestre di dialogo con un modulo breve; da telefono non escono dallo
+   schermo. */
+.dialog-narrow {
+    width: 26rem;
+    max-width: calc(100vw - 2rem);
+}

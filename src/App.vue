@@ -27,7 +27,7 @@ watch(() => errors.last, (err) => {
 
         <div class="app-main">
             <TopBar />
-            <ProgressBar v-if="loading.isLoading" mode="indeterminate" style="height: 3px" />
+            <ProgressBar v-if="loading.isLoading" mode="indeterminate" class="app-progress" />
 
             <main class="app-content">
                 <StorageBanner />

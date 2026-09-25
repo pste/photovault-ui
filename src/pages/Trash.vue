@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { thumbURL } from '@/plugins/api';
 import useTrashStore from '@/stores/trash';
 import useJobsStore from '@/stores/jobs';
@@ -15,6 +15,14 @@ const statuses = [
     { label: 'In attesa', value: 'pending' },
     { label: 'Eliminati', value: 'purged' },
 ];
+
+// Anteprime che non si caricano: la thumbnail di un file gia' eliminato non
+// c'e' piu', e al suo posto va il segnaposto invece dell'icona d'immagine rotta.
+const broken = ref(new Set());
+
+function markBroken(id) {
+    broken.value = new Set(broken.value).add(id);
+}
 
 const occupati = computed(() => formatSize(store.stats?.bytes_nel_cestino));
 
@@ -58,14 +66,14 @@ onMounted(async () => {
                  che si vede cosa si sta per buttare senza aprire il NAS. Manca
                  per i file non gestiti e per le cartelle, che una thumbnail non
                  ce l'hanno mai avuta. -->
-            <Column header="" style="width: 4rem">
+            <Column header="" header-class="col-w-4">
                 <template #body="{ data }">
                     <img
-                        v-if="data.media_id"
+                        v-if="data.media_id && !broken.has(data.media_id)"
                         class="trash-thumb"
                         :src="thumbURL(data.media_id, 's')"
                         alt=""
-                        @error="(e) => (e.target.style.display = 'none')"
+                        @error="markBroken(data.media_id)"
                     />
                     <div v-else class="trash-thumb is-placeholder">
                         <i :class="data.folder_id ? 'pi pi-folder' : 'pi pi-file'"></i>
