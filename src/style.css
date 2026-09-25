@@ -710,3 +710,10 @@ body {
     width: 26rem;
     max-width: calc(100vw - 2rem);
 }
+
+/* Da tastiera si deve vedere quale tile ha il fuoco. */
+.media-tile:focus-visible,
+.folder-tile:focus-visible {
+    outline: 2px solid var(--p-primary-color);
+    outline-offset: 2px;
+}

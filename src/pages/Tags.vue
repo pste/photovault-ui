@@ -155,14 +155,16 @@ onMounted(store.load);
 
             <Column header="" header-class="col-w-12">
                 <template #body="{ data }">
-                    <Button icon="pi pi-pencil" text rounded v-tooltip.bottom="'Rinomina o cambia categoria'"
-                        @click="openEdit(data)" />
-                    <Button icon="pi pi-sign-in" text rounded v-tooltip.bottom="'Fondi in un altro tag'"
-                        :disabled="data.blocked || data.usage === 0" @click="openMerge(data)" />
+                    <Button icon="pi pi-pencil" text rounded aria-label="Rinomina o cambia categoria"
+                        v-tooltip.bottom="'Rinomina o cambia categoria'" @click="openEdit(data)" />
+                    <Button icon="pi pi-sign-in" text rounded aria-label="Fondi in un altro tag"
+                        v-tooltip.bottom="'Fondi in un altro tag'" :disabled="data.blocked || data.usage === 0" @click="openMerge(data)" />
                     <Button :icon="data.blocked ? 'pi pi-lock-open' : 'pi pi-ban'" text rounded
+                        :aria-label="data.blocked ? 'Sblocca' : 'Blocca'"
                         v-tooltip.bottom="data.blocked ? 'Sblocca' : 'Blocca: nessun job potrà assegnarlo'"
                         @click="toggleBlock(data)" />
                     <Button icon="pi pi-trash" text rounded severity="danger"
+                        aria-label="Elimina le assegnazioni e blocca"
                         v-tooltip.bottom="'Elimina le assegnazioni e blocca'"
                         :disabled="data.usage === 0" @click="confirmClear(data)" />
                 </template>

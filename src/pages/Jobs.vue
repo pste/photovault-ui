@@ -48,7 +48,7 @@ onMounted(refresh);
                 outlined
                 @click="jobsStore.enqueue(name).then(refresh)"
             />
-            <Button icon="pi pi-refresh" text @click="refresh" />
+            <Button icon="pi pi-refresh" text aria-label="Aggiorna" @click="refresh" />
         </div>
 
         <DataTable :value="jobsStore.jobs" size="small" striped-rows>
@@ -68,7 +68,7 @@ onMounted(refresh);
             <Column field="result" header="Esito" />
             <Column>
                 <template #body="{ data }">
-                    <Button icon="pi pi-trash" text severity="danger" @click="jobsStore.remove(data.job_id)" />
+                    <Button icon="pi pi-trash" text severity="danger" aria-label="Elimina il job" @click="jobsStore.remove(data.job_id)" />
                 </template>
             </Column>
         </DataTable>

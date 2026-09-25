@@ -93,12 +93,11 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
         </div>
 
         <template #footer>
-            <Button icon="pi pi-chevron-left" text :disabled="index <= 0" @click="step(-1)" />
+            <Button icon="pi pi-chevron-left" text aria-label="Precedente" :disabled="index <= 0" @click="step(-1)" />
             <span class="mx-2">{{ index + 1 }} / {{ items.length }}</span>
-            <Button icon="pi pi-chevron-right" text :disabled="index < 0 || index >= items.length - 1" @click="step(1)" />
-            <a :href="originalURL(mediaId)" target="_blank" rel="noopener">
-                <Button icon="pi pi-download" text label="Originale" />
-            </a>
+            <Button icon="pi pi-chevron-right" text aria-label="Successiva" :disabled="index < 0 || index >= items.length - 1" @click="step(1)" />
+            <Button as="a" :href="originalURL(mediaId)" target="_blank" rel="noopener"
+                    icon="pi pi-download" text label="Originale" />
         </template>
     </Dialog>
 </template>

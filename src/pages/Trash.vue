@@ -44,7 +44,7 @@ onMounted(async () => {
                 option-value="value"
                 @update:model-value="(v) => store.setStatus(v)"
             />
-            <Button icon="pi pi-refresh" text @click="store.load()" />
+            <Button icon="pi pi-refresh" text aria-label="Aggiorna" @click="store.load()" />
             <Button label="Svuota adesso gli scaduti" icon="pi pi-play" size="small" outlined
                     @click="jobsStore.enqueue('trashpurge')" />
         </div>

@@ -65,7 +65,7 @@ onMounted(() => store.load());
                 option-value="value"
                 @update:model-value="(v) => store.setFilter(store.status, v)"
             />
-            <Button icon="pi pi-refresh" text @click="store.load()" />
+            <Button icon="pi pi-refresh" text aria-label="Aggiorna" @click="store.load()" />
         </div>
 
         <div v-if="store.stats" class="mb-4 flex gap-4 flex-wrap">
@@ -93,10 +93,10 @@ onMounted(() => store.load());
         </div>
 
         <div v-if="pages > 1" class="flex align-items-center gap-2 mt-3">
-            <Button icon="pi pi-chevron-left" text :disabled="store.page === 0"
+            <Button icon="pi pi-chevron-left" text aria-label="Pagina precedente" :disabled="store.page === 0"
                     @click="store.goToPage(store.page - 1)" />
             <span>pagina {{ store.page + 1 }} di {{ pages }}</span>
-            <Button icon="pi pi-chevron-right" text :disabled="store.page >= pages - 1"
+            <Button icon="pi pi-chevron-right" text aria-label="Pagina successiva" :disabled="store.page >= pages - 1"
                     @click="store.goToPage(store.page + 1)" />
         </div>
 

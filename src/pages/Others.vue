@@ -70,7 +70,7 @@ onMounted(() => store.load());
                 :disabled="selected.length === 0"
                 @click="confirmTrash"
             />
-            <Button icon="pi pi-refresh" text @click="store.load()" />
+            <Button icon="pi pi-refresh" text aria-label="Aggiorna" @click="store.load()" />
         </div>
 
         <div v-if="store.stats" class="mb-3 flex gap-4 flex-wrap align-items-center">
@@ -122,10 +122,9 @@ onMounted(() => store.load());
             </Column>
             <Column header="" header-class="col-w-4">
                 <template #body="{ data }">
-                    <a :href="otherDownloadURL(data.other_id)" :download="data.file_name">
-                        <Button icon="pi pi-download" text rounded
-                                v-tooltip.bottom="'Scarica per vedere cos\'è'" />
-                    </a>
+                    <Button as="a" :href="otherDownloadURL(data.other_id)" :download="data.file_name"
+                            icon="pi pi-download" text rounded aria-label="Scarica"
+                            v-tooltip.bottom="'Scarica per vedere cos\'è'" />
                 </template>
             </Column>
             <Column field="modified" header="Modificato" header-class="col-w-9">

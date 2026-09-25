@@ -26,6 +26,15 @@ function onClick() {
     }
 }
 
+// Da tastiera, in selezione, Invio e spazio spuntano. Fuori dalla selezione la
+// tile e' un link e Invio lo segue da se': qui non va toccato.
+function onKey(event) {
+    if (props.selecting) {
+        event.preventDefault();
+        emit('toggle', props.folder);
+    }
+}
+
 // Al massimo quattro anteprime: il mosaico e' 2x2.
 const previews = computed(() => (props.folder.previews || []).slice(0, 4));
 
@@ -47,7 +56,12 @@ const meta = computed(() => {
         :to="selecting ? undefined : { name: 'folder', params: { folderId: folder.folder_id } }"
         class="folder-tile clickable block no-underline text-color"
         :class="{ 'is-selected': selected }"
+        :tabindex="selecting ? 0 : undefined"
+        :role="selecting ? 'button' : undefined"
+        :aria-pressed="selecting ? selected : undefined"
         @click="onClick"
+        @keydown.enter="onKey"
+        @keydown.space="onKey"
     >
         <span v-if="selecting" class="media-check">
             <i :class="selected ? 'pi pi-check-circle' : 'pi pi-circle'"></i>

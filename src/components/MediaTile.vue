@@ -32,6 +32,18 @@ function onClick() {
         emit('toggle', props.item);
     }
 }
+
+// Da tastiera Invio e spazio fanno quello che fa il mouse: aprono, o in
+// modalita' selezione spuntano. Prima la tile era un div senza tabindex e da
+// tastiera non si raggiungeva nemmeno.
+function onKey() {
+    if (props.selecting) {
+        emit('toggle', props.item);
+    }
+    else {
+        emit('open', props.item);
+    }
+}
 </script>
 
 <template>
@@ -39,8 +51,14 @@ function onClick() {
         class="media-tile"
         :class="{ clickable: selecting, 'is-selected': selected }"
         :title="item.file_name"
+        tabindex="0"
+        role="button"
+        :aria-label="item.file_name"
+        :aria-pressed="selecting ? selected : undefined"
         @click="onClick"
         @dblclick="emit('open', item)"
+        @keydown.enter.prevent="onKey"
+        @keydown.space.prevent="onKey"
     >
         <img
             v-if="hasThumb"
