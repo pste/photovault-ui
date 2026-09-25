@@ -101,5 +101,8 @@ onMounted(() => store.load());
             <Button icon="pi pi-chevron-right" text :disabled="store.page >= pages - 1"
                     @click="store.goToPage(store.page + 1)" />
         </div>
+
+        <!-- Conferma dei gruppi con hash parziale, vedi DupGroupCard. -->
+        <ConfirmDialog group="dup-partial" />
     </div>
 </template>

@@ -281,6 +281,12 @@ body {
     font-size: 0.9rem;
 }
 
+.dup-note {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--p-orange-600);
+}
+
 /* I membri scorrono in orizzontale: un gruppo può averne parecchi, e mandarli
    a capo spezzerebbe il confronto visivo affiancato. */
 .dup-members {
