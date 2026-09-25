@@ -7,6 +7,10 @@ const route = useRoute();
 const router = useRouter();
 const session = useSessionStore();
 
+// La versione la scrive la CI al build (VITE_APP_VERSION, il tag del rilascio):
+// dice a colpo d'occhio se il rilascio appena fatto e' davvero quello in linea.
+const version = import.meta.env.VITE_APP_VERSION || 'dev';
+
 const username = ref('');
 const password = ref('');
 const error = ref('');
@@ -58,5 +62,6 @@ async function submit() {
             <Button type="submit" label="Entra" icon="pi pi-sign-in" class="w-full"
                     :loading="busy" :disabled="!username || !password" />
         </form>
+        <small class="login-version">{{ version }}</small>
     </div>
 </template>
