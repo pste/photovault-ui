@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
 import { useLatest } from '@/composables/useLatest';
+import { appendMedia } from '@/plugins/lists';
 
 const PAGE_SIZE = 200;
 
@@ -17,7 +18,6 @@ const useBrowseStore = defineStore('browse', () => {
     const subfolders = ref([]);
     const media = ref([]);
     const total = ref(0);
-    const page = ref(0);
 
     // Senza, navigando veloce -- Indietro mentre si e' in fondo alla griglia --
     // il loadMore della cartella di prima accodava le sue foto a quella nuova,
@@ -40,7 +40,7 @@ const useBrowseStore = defineStore('browse', () => {
         breadcrumb.value = data.breadcrumb;
         subfolders.value = data.subfolders;
         total.value = data.total;
-        media.value = append ? media.value.concat(data.media) : data.media;
+        media.value = append ? appendMedia(media.value, data.media) : data.media;
     }
 
     // folderId null = primo livello della root corrente.
@@ -55,13 +55,12 @@ const useBrowseStore = defineStore('browse', () => {
             const data = await api.get('/browse/folder', {
                 folder: folderId || null,
                 root: folderId ? null : rootId.value,
-                page: 0,
+                offset: 0,
                 size: PAGE_SIZE,
             });
             if (!latest.isCurrent(token)) {
                 return;
             }
-            page.value = 0;
             applyPage(data, false);
             if (data.folder) {
                 rootId.value = data.folder.root_id;
@@ -78,10 +77,12 @@ const useBrowseStore = defineStore('browse', () => {
         }
         const token = latest.peek();
         const folderId = folder.value.folder_id;
-        const next = page.value + 1;
+        // Si chiede "dal file N" con N quanti se ne hanno, non la pagina
+        // successiva: dopo aver cestinato k file, che l'API esclude subito, la
+        // pagina successiva partiva k righe troppo avanti e li saltava.
         const data = await api.get('/browse/folder', {
             folder: folderId,
-            page: next,
+            offset: media.value.length,
             size: PAGE_SIZE,
         });
         // Scartata se nel frattempo e' partita un'altra open(), anche se non
@@ -89,9 +90,6 @@ const useBrowseStore = defineStore('browse', () => {
         if (!latest.isCurrent(token) || !folder.value || folder.value.folder_id !== folderId) {
             return;
         }
-        // La pagina avanza solo a risposta ricevuta: se la richiesta fallisce,
-        // il prossimo scroll ritenta la stessa invece di saltarla.
-        page.value = next;
         applyPage(data, true);
     }
 

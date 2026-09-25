@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
 import { useLatest } from '@/composables/useLatest';
+import { appendMedia } from '@/plugins/lists';
 
 const PAGE_SIZE = 200;
 
@@ -33,7 +34,6 @@ const useSearchStore = defineStore('search', () => {
     const filters = ref({ q: '', kind: '', tag: '', from: '', to: '' });
     const media = ref([]);
     const total = ref(0);
-    const page = ref(0);
     const ran = ref(false);
 
     // Le risposte di una ricerca superata si scartano invece di sovrascrivere
@@ -42,21 +42,21 @@ const useSearchStore = defineStore('search', () => {
 
     const hasMore = computed(() => media.value.length < total.value);
 
-    async function fetchPage(pageNumber, append) {
+    // offset e' quanti media si hanno gia': vedi browse.loadMore.
+    async function fetchPage(offset, append) {
         const token = latest.peek();
         const data = await api.get('/search', {
             ...filters.value,
             from: dayStart(filters.value.from),
             to: dayEnd(filters.value.to),
-            page: pageNumber,
+            offset,
             size: PAGE_SIZE,
         });
         if (!latest.isCurrent(token)) {
             return;
         }
-        page.value = pageNumber;
         total.value = data.total;
-        media.value = append ? media.value.concat(data.media) : data.media;
+        media.value = append ? appendMedia(media.value, data.media) : data.media;
         ran.value = true;
     }
 
@@ -79,7 +79,7 @@ const useSearchStore = defineStore('search', () => {
         if (!hasMore.value) {
             return;
         }
-        await fetchPage(page.value + 1, true);
+        await fetchPage(media.value.length, true);
     }
 
     function reset() {
@@ -87,7 +87,6 @@ const useSearchStore = defineStore('search', () => {
         filters.value = { q: '', kind: '', tag: '', from: '', to: '' };
         media.value = [];
         total.value = 0;
-        page.value = 0;
         ran.value = false;
     }
 
