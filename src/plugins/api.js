@@ -25,7 +25,10 @@ function buildURL(url, query) {
     return address;
 }
 
-async function request(method, url, { query, body } = {}) {
+// quiet: l'errore non diventa un toast. Serve agli aggiornamenti in
+// background, che falliscono a ogni giro finche' l'API non torna: un toast ogni
+// trenta secondi non aggiunge informazione, la copre.
+async function request(method, url, { query, body, quiet } = {}) {
     const errors = useErrorsStore();
     const address = buildURL(url, query);
 
@@ -44,13 +47,15 @@ async function request(method, url, { query, body } = {}) {
     }
     catch(err) {
         logger.error(`API ${method} ${address}`, err);
-        errors.push(err.message);
+        if (!quiet) {
+            errors.push(err.message);
+        }
         throw err;
     }
 }
 
 export const api = {
-    get: (url, query) => request('GET', url, { query }),
+    get: (url, query, options) => request('GET', url, { query, ...options }),
     post: (url, body) => request('POST', url, { body }),
     patch: (url, body) => request('PATCH', url, { body }),
     del: (url) => request('DELETE', url),

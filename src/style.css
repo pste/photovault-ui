@@ -488,6 +488,11 @@ body {
 
 /* ---------- stats ---------- */
 
+.stat-stale {
+    margin: 0 0 1rem;
+    color: var(--p-orange-600);
+}
+
 .stat-summary {
     display: grid;
     gap: 0.75rem;

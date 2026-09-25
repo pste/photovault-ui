@@ -4,7 +4,10 @@ import { api } from '@/plugins/api';
 
 const stats = ref(null);
 const others = ref(null);
+const updatedAt = ref(null);
+const stale = ref(false);
 let timer = null;
+let busy = false;
 
 // Le fasi della pipeline, ognuna con quanto è fatto e su quanto.
 //
@@ -112,16 +115,40 @@ function decimali(n, cifre) {
     return n.toLocaleString('it-IT', { minimumFractionDigits: cifre, maximumFractionDigits: cifre });
 }
 
-async function load() {
-    stats.value = await api.get('/stats');
-    others.value = await api.get('/others/stats');
+// Il primo caricamento segnala gli errori come ogni altra pagina; gli
+// aggiornamenti periodici no, e lo dicono sulla pagina stessa: un toast ogni
+// trenta secondi finche' l'API non torna copriva tutto il resto.
+async function load(quiet) {
+    if (busy) {
+        return;
+    }
+    busy = true;
+    try {
+        const newStats = await api.get('/stats', null, { quiet });
+        const newOthers = await api.get('/others/stats', null, { quiet });
+        stats.value = newStats;
+        others.value = newOthers;
+        updatedAt.value = new Date();
+        stale.value = false;
+    }
+    catch(err) {
+        stale.value = true;
+    }
+    finally {
+        busy = false;
+    }
 }
 
 // Le code si svuotano mentre la pagina è aperta: senza un aggiornamento
 // periodico si guarderebbe una fotografia vecchia di ore credendola attuale.
+// Con la scheda nascosta non si aggiorna niente: nessuno sta guardando.
 onMounted(() => {
-    load();
-    timer = setInterval(load, 30000);
+    load(false);
+    timer = setInterval(() => {
+        if (!document.hidden) {
+            load(true);
+        }
+    }, 30000);
 });
 onUnmounted(() => clearInterval(timer));
 </script>
@@ -131,6 +158,10 @@ onUnmounted(() => clearInterval(timer));
         <div v-if="!stats" class="empty-state">Caricamento…</div>
 
         <template v-else>
+            <p v-if="stale" class="stat-stale">
+                Aggiornamento non riuscito: i dati sono delle
+                {{ updatedAt.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) }}.
+            </p>
             <div class="stat-summary">
                 <div v-for="r in riepilogo" :key="r.label" class="stat-card">
                     <div class="stat-value" :class="{ 'is-warn': r.warn }">{{ r.value }}</div>
