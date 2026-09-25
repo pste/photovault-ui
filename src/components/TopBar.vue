@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useSearchStore from '@/stores/search';
 import useTheme from '@/composables/useTheme';
 import useNav from '@/composables/useNav';
 
+const route = useRoute();
 const router = useRouter();
 const searchStore = useSearchStore();
 const { isDark, toggle } = useTheme();
@@ -16,8 +17,15 @@ function submit() {
     if (q.length === 0) {
         return;
     }
-    searchStore.run({ q });
-    router.push({ name: 'search', query: { q } });
+    // La ricerca la lancia la pagina Ricerca quando ?q= cambia: lanciarla anche
+    // qui la faceva partire due volte. Solo se si ripete la stessa ricerca
+    // l'URL non cambia, e allora tocca a noi.
+    if (route.name === 'search' && route.query.q === q) {
+        searchStore.run({ q });
+    }
+    else {
+        router.push({ name: 'search', query: { q } });
+    }
 }
 </script>
 
