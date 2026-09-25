@@ -5,6 +5,29 @@ import useLoadingStore from '@/stores/loading';
 
 const PAGE_SIZE = 200;
 
+// Il DatePicker restituisce un Date, e URLSearchParams lo spediva come
+// "Fri Sep 25 2026 00:00:00 GMT+0200 (Central European Summer Time)", che
+// PostgreSQL non sa leggere. Si mandano istanti ISO calcolati sull'ora locale:
+// da inizio del primo giorno a fine dell'ultimo, cosi' "fino al 25" comprende
+// il 25 -- a mezzanotte lo escludeva.
+function dayStart(value) {
+    if (!value) {
+        return null;
+    }
+    const d = new Date(value);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString();
+}
+
+function dayEnd(value) {
+    if (!value) {
+        return null;
+    }
+    const d = new Date(value);
+    d.setHours(23, 59, 59, 999);
+    return d.toISOString();
+}
+
 const useSearchStore = defineStore('search', () => {
     const filters = ref({ q: '', kind: '', tag: '', from: '', to: '' });
     const media = ref([]);
@@ -22,6 +45,8 @@ const useSearchStore = defineStore('search', () => {
         const current = generation;
         const data = await api.get('/search', {
             ...filters.value,
+            from: dayStart(filters.value.from),
+            to: dayEnd(filters.value.to),
             page: pageNumber,
             size: PAGE_SIZE,
         });
