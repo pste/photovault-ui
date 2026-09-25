@@ -9,6 +9,7 @@ import MediaGrid from '@/components/MediaGrid.vue';
 import SelectionBar from '@/components/SelectionBar.vue';
 import Lightbox from '@/components/Lightbox.vue';
 import { useSelection } from '@/composables/useSelection';
+import { useLightboxRoute } from '@/composables/useLightboxRoute';
 import { api } from '@/plugins/api';
 
 const route = useRoute();
@@ -17,16 +18,10 @@ const browse = useBrowseStore();
 const confirm = useConfirm();
 const toast = useToast();
 const selection = useSelection();
+const { openedId, openMedia, closeMedia, navigateMedia } = useLightboxRoute();
 
 const folderId = computed(() => {
     const id = parseInt(route.params.folderId, 10);
-    return Number.isNaN(id) ? null : id;
-});
-
-// Il visore non e' una rotta ma un parametro della query: cosi' l'immagine e'
-// linkabile e il tasto Indietro chiude il visore invece di uscire dalla cartella.
-const openedId = computed(() => {
-    const id = parseInt(route.query.m, 10);
     return Number.isNaN(id) ? null : id;
 });
 
@@ -38,20 +33,6 @@ const crumbs = computed(() => {
     }));
     return items;
 });
-
-function openMedia(item) {
-    router.push({ query: { ...route.query, m: item.media_id } });
-}
-
-function closeMedia() {
-    const query = { ...route.query };
-    delete query.m;
-    router.push({ query });
-}
-
-function navigateMedia(media_id) {
-    router.replace({ query: { ...route.query, m: media_id } });
-}
 
 function confirmTrash() {
     const folders = selection.folders.value.size;

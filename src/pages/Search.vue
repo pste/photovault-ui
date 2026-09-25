@@ -1,19 +1,20 @@
 <script setup>
-import { computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import useSearchStore from '@/stores/search';
 import MediaGrid from '@/components/MediaGrid.vue';
 import SelectionBar from '@/components/SelectionBar.vue';
 import { useSelection } from '@/composables/useSelection';
+import { useLightboxRoute } from '@/composables/useLightboxRoute';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { api } from '@/plugins/api';
 import Lightbox from '@/components/Lightbox.vue';
 
 const route = useRoute();
-const router = useRouter();
 const search = useSearchStore();
 const selection = useSelection();
+const { openedId, openMedia, closeMedia, navigateMedia } = useLightboxRoute();
 const confirm = useConfirm();
 const toast = useToast();
 
@@ -49,21 +50,6 @@ const kinds = [
     { label: 'Foto', value: 'image' },
     { label: 'Video', value: 'video' },
 ];
-
-const openedId = computed(() => {
-    const id = parseInt(route.query.m, 10);
-    return Number.isNaN(id) ? null : id;
-});
-
-function openMedia(item) {
-    router.push({ query: { ...route.query, m: item.media_id } });
-}
-
-function closeMedia() {
-    const query = { ...route.query };
-    delete query.m;
-    router.push({ query });
-}
 
 // La query nell'URL e' la fonte di verita': cosi' una ricerca e' condivisibile
 // e il tasto Indietro riporta ai risultati precedenti.
@@ -120,6 +106,6 @@ watch(() => route.query.q, runFromRoute);
 
         <ConfirmDialog />
 
-        <Lightbox :media-id="openedId" :items="search.media" @close="closeMedia" @navigate="(id) => router.replace({ query: { ...route.query, m: id } })" />
+        <Lightbox :media-id="openedId" :items="search.media" @close="closeMedia" @navigate="navigateMedia" />
     </div>
 </template>
