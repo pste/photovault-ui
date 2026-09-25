@@ -12,14 +12,23 @@ const useSearchStore = defineStore('search', () => {
     const page = ref(0);
     const ran = ref(false);
 
+    // Vedi browse.js: ogni run() apre una generazione, e le risposte di una
+    // ricerca superata si scartano invece di sovrascrivere quella nuova.
+    let generation = 0;
+
     const hasMore = computed(() => media.value.length < total.value);
 
-    async function fetchPage(append) {
+    async function fetchPage(pageNumber, append) {
+        const current = generation;
         const data = await api.get('/search', {
             ...filters.value,
-            page: page.value,
+            page: pageNumber,
             size: PAGE_SIZE,
         });
+        if (current !== generation) {
+            return;
+        }
+        page.value = pageNumber;
         total.value = data.total;
         media.value = append ? media.value.concat(data.media) : data.media;
         ran.value = true;
@@ -32,8 +41,8 @@ const useSearchStore = defineStore('search', () => {
             if (newFilters) {
                 filters.value = { ...filters.value, ...newFilters };
             }
-            page.value = 0;
-            await fetchPage(false);
+            generation++;
+            await fetchPage(0, false);
         }
         finally {
             loading.stop();
@@ -44,11 +53,11 @@ const useSearchStore = defineStore('search', () => {
         if (!hasMore.value) {
             return;
         }
-        page.value += 1;
-        await fetchPage(true);
+        await fetchPage(page.value + 1, true);
     }
 
     function reset() {
+        generation++;
         filters.value = { q: '', kind: '', tag: '', from: '', to: '' };
         media.value = [];
         total.value = 0;
