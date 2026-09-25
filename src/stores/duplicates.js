@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
+import { useLatest } from '@/composables/useLatest';
 
 const PAGE_SIZE = 20;
 
@@ -13,8 +14,12 @@ const useDuplicatesStore = defineStore('duplicates', () => {
     const kind = ref(null);
     const page = ref(0);
 
+    // Filtri e pagine cambiano a raffica: vale solo l'ultima risposta.
+    const latest = useLatest();
+
     async function load() {
         const loading = useLoadingStore();
+        const token = latest.start();
         loading.start();
         try {
             const data = await api.get('/duplicates', {
@@ -23,9 +28,13 @@ const useDuplicatesStore = defineStore('duplicates', () => {
                 page: page.value,
                 size: PAGE_SIZE,
             });
+            const newStats = await api.get('/duplicates/stats');
+            if (!latest.isCurrent(token)) {
+                return;
+            }
             groups.value = data.groups;
             total.value = data.total;
-            stats.value = await api.get('/duplicates/stats');
+            stats.value = newStats;
         }
         finally {
             loading.stop();

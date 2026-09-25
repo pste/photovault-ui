@@ -2,6 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
+import { useLatest } from '@/composables/useLatest';
 
 const PAGE_SIZE = 200;
 
@@ -35,14 +36,14 @@ const useSearchStore = defineStore('search', () => {
     const page = ref(0);
     const ran = ref(false);
 
-    // Vedi browse.js: ogni run() apre una generazione, e le risposte di una
-    // ricerca superata si scartano invece di sovrascrivere quella nuova.
-    let generation = 0;
+    // Le risposte di una ricerca superata si scartano invece di sovrascrivere
+    // quella nuova.
+    const latest = useLatest();
 
     const hasMore = computed(() => media.value.length < total.value);
 
     async function fetchPage(pageNumber, append) {
-        const current = generation;
+        const token = latest.peek();
         const data = await api.get('/search', {
             ...filters.value,
             from: dayStart(filters.value.from),
@@ -50,7 +51,7 @@ const useSearchStore = defineStore('search', () => {
             page: pageNumber,
             size: PAGE_SIZE,
         });
-        if (current !== generation) {
+        if (!latest.isCurrent(token)) {
             return;
         }
         page.value = pageNumber;
@@ -66,7 +67,7 @@ const useSearchStore = defineStore('search', () => {
             if (newFilters) {
                 filters.value = { ...filters.value, ...newFilters };
             }
-            generation++;
+            latest.start();
             await fetchPage(0, false);
         }
         finally {
@@ -82,7 +83,7 @@ const useSearchStore = defineStore('search', () => {
     }
 
     function reset() {
-        generation++;
+        latest.start();
         filters.value = { q: '', kind: '', tag: '', from: '', to: '' };
         media.value = [];
         total.value = 0;

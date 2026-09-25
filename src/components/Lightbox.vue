@@ -25,7 +25,13 @@ async function load(id) {
     if (id === null) {
         return;
     }
-    detail.value = await api.get(`/media/${id}`);
+    const data = await api.get(`/media/${id}`);
+    // Scorrendo veloce con le frecce, la risposta di una foto precedente puo'
+    // arrivare dopo quella corrente: intestazione, EXIF e scelta foto/video
+    // sarebbero di un altro file.
+    if (props.mediaId === id) {
+        detail.value = data;
+    }
 }
 
 function step(delta) {

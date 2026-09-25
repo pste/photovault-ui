@@ -2,6 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
+import { useLatest } from '@/composables/useLatest';
 
 const PAGE_SIZE = 200;
 
@@ -18,13 +19,10 @@ const useBrowseStore = defineStore('browse', () => {
     const total = ref(0);
     const page = ref(0);
 
-    // Ogni open() apre una nuova generazione: una risposta arrivata dopo
-    // l'apertura di un'altra cartella appartiene a una generazione vecchia e si
-    // scarta. Senza, navigando veloce -- Indietro mentre si e' in fondo alla
-    // griglia -- il loadMore della cartella di prima accodava le sue foto a
-    // quella nuova, breadcrumb compreso, e si poteva cestinare dalla cartella
-    // sbagliata.
-    let generation = 0;
+    // Senza, navigando veloce -- Indietro mentre si e' in fondo alla griglia --
+    // il loadMore della cartella di prima accodava le sue foto a quella nuova,
+    // breadcrumb compreso, e si poteva cestinare dalla cartella sbagliata.
+    const latest = useLatest();
 
     const hasMore = computed(() => media.value.length < total.value);
     const isEmpty = computed(() => subfolders.value.length === 0 && media.value.length === 0);
@@ -48,7 +46,7 @@ const useBrowseStore = defineStore('browse', () => {
     // folderId null = primo livello della root corrente.
     async function open(folderId) {
         const loading = useLoadingStore();
-        const current = ++generation;
+        const token = latest.start();
         loading.start();
         try {
             if (roots.value.length === 0) {
@@ -60,7 +58,7 @@ const useBrowseStore = defineStore('browse', () => {
                 page: 0,
                 size: PAGE_SIZE,
             });
-            if (current !== generation) {
+            if (!latest.isCurrent(token)) {
                 return;
             }
             page.value = 0;
@@ -78,7 +76,7 @@ const useBrowseStore = defineStore('browse', () => {
         if (!hasMore.value || !folder.value) {
             return;
         }
-        const current = generation;
+        const token = latest.peek();
         const folderId = folder.value.folder_id;
         const next = page.value + 1;
         const data = await api.get('/browse/folder', {
@@ -88,7 +86,7 @@ const useBrowseStore = defineStore('browse', () => {
         });
         // Scartata se nel frattempo e' partita un'altra open(), anche se non
         // e' ancora finita: la cartella mostrata sta per cambiare.
-        if (current !== generation || !folder.value || folder.value.folder_id !== folderId) {
+        if (!latest.isCurrent(token) || !folder.value || folder.value.folder_id !== folderId) {
             return;
         }
         // La pagina avanza solo a risposta ricevuta: se la richiesta fallisce,

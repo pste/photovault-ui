@@ -2,6 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { api } from '@/plugins/api';
 import useLoadingStore from '@/stores/loading';
+import { useLatest } from '@/composables/useLatest';
 
 const PAGE_SIZE = 100;
 
@@ -16,11 +17,15 @@ const useOthersStore = defineStore('others', () => {
     const ext = ref(null);
     const sort = ref('size');
 
+    // Pagina, filtro e ordinamento cambiano a raffica: vale solo l'ultima.
+    const latest = useLatest();
+
     const pageSize = PAGE_SIZE;
     const offset = computed(() => page.value * PAGE_SIZE);
 
     async function load() {
         const loading = useLoadingStore();
+        const token = latest.start();
         loading.start();
         try {
             const data = await api.get('/others', {
@@ -29,9 +34,13 @@ const useOthersStore = defineStore('others', () => {
                 page: page.value,
                 size: PAGE_SIZE,
             });
+            const newStats = await api.get('/others/stats');
+            if (!latest.isCurrent(token)) {
+                return;
+            }
             items.value = data.items;
             total.value = data.total;
-            stats.value = await api.get('/others/stats');
+            stats.value = newStats;
         }
         finally {
             loading.stop();
