@@ -105,6 +105,15 @@ onMounted(async () => {
             <Column field="result" header="Esito" />
         </DataTable>
 
+        <Paginator
+            v-if="store.total > store.pageSize"
+            :rows="store.pageSize"
+            :total-records="store.total"
+            :first="store.offset"
+            class="mt-2"
+            @page="(e) => store.goToPage(e.page)"
+        />
+
         <div v-if="store.items.length === 0" class="empty-state">Il cestino è vuoto.</div>
     </div>
 </template>
