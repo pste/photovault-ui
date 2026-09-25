@@ -49,10 +49,12 @@ src/
 │   ├── Tags.vue           /tags — rinomina, fusione, categoria, blocco
 │   ├── Stats.vue          /stats — avanzamento della pipeline, con le barre
 │   ├── Jobs.vue           /jobs
-│   └── Parameters.vue     /parameters
+│   ├── Parameters.vue     /parameters
+│   └── Login.vue          /login — l'unica pagina senza sessione, e senza menu
 ├── stores/                browse, search, duplicates, trash, others, tags, jobs,
-│                          parameters, storage, errors, loading
-├── composables/           useInfiniteScroll, useSelection, useTheme, useNav
+│                          parameters, storage, errors, loading, session
+├── composables/           useInfiniteScroll, useSelection, useTheme, useNav, useLatest,
+│                          useLightboxRoute
 └── plugins/               index (registerPlugins), pinia, router, api, toast, logger
 ```
 
@@ -102,9 +104,16 @@ virtualizzazione. Gli attributi `width`/`height` espliciti evitano il layout shi
 elementi per riga cambia con la larghezza della finestra: costerebbe una sessantina di righe
 di ricalcolo sul resize, per nulla.
 
-**Da non portare da reimagined-disco**: `stores/session.js`, `stores/cache.js`,
-`plugins/idxdb.js`, `useCacheFeeder`, e il plugin PWA. La cache HTTP `immutable` sulle
-thumbnail li rende tutti superflui.
+**Da non portare da reimagined-disco**: `stores/cache.js`, `plugins/idxdb.js`,
+`useCacheFeeder` e il plugin PWA. La cache HTTP `immutable` sulle thumbnail li rende tutti
+superflui.
+
+**Login.** Senza sessione il router porta a `/login?redirect=<pagina>`, e dopo il login si
+torna lì (solo percorsi interni). La sessione vive in un cookie `HttpOnly` che la pagina non
+legge: `stores/session.js` tiene solo il nome, chiesto a `/api/me` alla prima navigazione. Un
+401 da qualsiasi chiamata riporta al login, senza toast né log: non è un guasto, è "non sei
+dentro". Le chiamate usano `credentials: 'include'`, perché in sviluppo UI e API stanno su
+porte diverse.
 
 ## Build
 

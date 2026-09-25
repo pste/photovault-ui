@@ -2,12 +2,14 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useSearchStore from '@/stores/search';
+import useSessionStore from '@/stores/session';
 import useTheme from '@/composables/useTheme';
 import useNav from '@/composables/useNav';
 
 const route = useRoute();
 const router = useRouter();
 const searchStore = useSearchStore();
+const session = useSessionStore();
 const { isDark, toggle } = useTheme();
 const { open } = useNav();
 const text = ref('');
@@ -58,6 +60,16 @@ function submit() {
             text
             rounded
             @click="toggle"
+        />
+
+        <span v-if="session.user" class="top-user">{{ session.user.username }}</span>
+        <Button
+            icon="pi pi-sign-out"
+            aria-label="Esci"
+            v-tooltip.bottom="'Esci'"
+            text
+            rounded
+            @click="session.logout()"
         />
     </div>
 </template>

@@ -717,3 +717,41 @@ body {
     outline: 2px solid var(--p-primary-color);
     outline-offset: 2px;
 }
+
+/* ---------- login ---------- */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--p-content-background);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 22rem;
+    padding: 1.5rem;
+    border: 1px solid var(--p-content-border-color);
+    border-radius: var(--p-content-border-radius);
+}
+
+.login-title {
+    margin: 0 0 1.25rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Il nome di chi e' dentro, accanto al pulsante per uscire. Da telefono lo
+   spazio serve alla ricerca. */
+.top-user {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 767px) {
+    .top-user {
+        display: none;
+    }
+}

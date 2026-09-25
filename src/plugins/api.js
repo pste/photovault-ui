@@ -1,5 +1,6 @@
 import logger from '@/plugins/logger';
 import useErrorsStore from '@/stores/errors';
+import useSessionStore from '@/stores/session';
 
 // In produzione UI e API stanno sullo stesso host: l'ingress manda / alla UI e
 // /api all'API, quindi un percorso relativo basta. In sviluppo il dev server di
@@ -33,22 +34,37 @@ async function request(method, url, { query, body, quiet } = {}) {
     const address = buildURL(url, query);
 
     try {
+        // credentials include: in produzione UI e API stanno sullo stesso host e
+        // il cookie partirebbe comunque, ma in sviluppo stanno su porte diverse.
         const res = await fetch(address, {
             method,
+            credentials: 'include',
             headers: body ? { 'Content-Type': 'application/json' } : undefined,
             body: body ? JSON.stringify(body) : undefined,
         });
 
+        // Sessione scaduta o chiusa: il momento di tornare al login. Ci pensa
+        // App.vue, che guarda lo store.
+        if (res.status === 401 && !quiet) {
+            useSessionStore().expired();
+        }
+
         if (!res.ok) {
             const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || `Errore ${res.status}`);
+            const err = new Error(data.error || `Errore ${res.status}`);
+            err.status = res.status;
+            throw err;
         }
         return await res.json();
     }
     catch(err) {
-        logger.error(`API ${method} ${address}`, err);
-        if (!quiet) {
-            errors.push(err.message);
+        // Un 401 non e' un guasto: e' "non sei dentro", e se ne occupa il
+        // ritorno al login. Ne' log ne' toast.
+        if (err.status !== 401) {
+            logger.error(`API ${method} ${address}`, err);
+            if (!quiet) {
+                errors.push(err.message);
+            }
         }
         throw err;
     }
@@ -56,7 +72,7 @@ async function request(method, url, { query, body, quiet } = {}) {
 
 export const api = {
     get: (url, query, options) => request('GET', url, { query, ...options }),
-    post: (url, body) => request('POST', url, { body }),
+    post: (url, body, options) => request('POST', url, { body, ...options }),
     patch: (url, body) => request('PATCH', url, { body }),
     del: (url) => request('DELETE', url),
 };
