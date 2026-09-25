@@ -24,12 +24,28 @@ const duration = computed(() => {
     return `${mm}:${ss}`;
 });
 
-// Fuori dalla modalita' selezione il clic singolo non fa niente: ad aprire e' il
-// doppio clic. Cosi' passare sulla griglia non spalanca il visore per sbaglio,
-// ed e' anche il comportamento del file manager.
-function onClick() {
+// Col mouse, fuori dalla modalita' selezione, il clic singolo non fa niente: ad
+// aprire e' il doppio clic. Cosi' passare sulla griglia non spalanca il visore
+// per sbaglio, ed e' anche il comportamento del file manager.
+//
+// Col dito invece un tocco apre: da telefono il doppio tocco non arriva come
+// doppio clic, e la tile non si apriva in nessun modo -- segnalato il
+// 2026-09-25 come "i video non partono, vedo solo la thumbnail". pointerType
+// dice da dove arriva il clic; dove manca, (hover: none) dice se il
+// dispositivo ha solo il touch.
+function isTouch(event) {
+    if (event.pointerType) {
+        return event.pointerType === 'touch' || event.pointerType === 'pen';
+    }
+    return window.matchMedia('(hover: none)').matches;
+}
+
+function onClick(event) {
     if (props.selecting) {
         emit('toggle', props.item);
+    }
+    else if (isTouch(event)) {
+        emit('open', props.item);
     }
 }
 
