@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import useJobsStore from '@/stores/jobs';
+import { formatDateTime } from '@/plugins/format';
 
 const jobsStore = useJobsStore();
 
@@ -27,13 +28,6 @@ const severity = {
     done: 'success',
     error: 'danger',
 };
-
-function formatDate(value) {
-    if (!value) {
-        return '';
-    }
-    return new Date(value).toLocaleString('it-IT');
-}
 
 async function refresh() {
     await jobsStore.load();
@@ -66,10 +60,10 @@ onMounted(refresh);
                 </template>
             </Column>
             <Column header="Previsto">
-                <template #body="{ data }">{{ formatDate(data.when) }}</template>
+                <template #body="{ data }">{{ formatDateTime(data.when) }}</template>
             </Column>
             <Column header="Concluso">
-                <template #body="{ data }">{{ formatDate(data.ended) }}</template>
+                <template #body="{ data }">{{ formatDateTime(data.ended) }}</template>
             </Column>
             <Column field="result" header="Esito" />
             <Column>

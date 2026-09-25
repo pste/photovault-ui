@@ -4,6 +4,7 @@ import { thumbURL } from '@/plugins/api';
 import useTrashStore from '@/stores/trash';
 import useJobsStore from '@/stores/jobs';
 import useParametersStore from '@/stores/parameters';
+import { formatSize, formatDateTime } from '@/plugins/format';
 
 const store = useTrashStore();
 const jobsStore = useJobsStore();
@@ -15,23 +16,9 @@ const statuses = [
     { label: 'Eliminati', value: 'purged' },
 ];
 
-const occupati = computed(() => {
-    const bytes = Number(store.stats?.bytes_nel_cestino || 0);
-    return (bytes / (1024 * 1024)).toFixed(1);
-});
+const occupati = computed(() => formatSize(store.stats?.bytes_nel_cestino));
 
 const ritenzione = computed(() => parameters.params?.trash_retention_days ?? 30);
-
-function formatSize(bytes) {
-    return `${(Number(bytes) / 1024).toFixed(0)} KB`;
-}
-
-function formatDate(value) {
-    if (!value) {
-        return '';
-    }
-    return new Date(value).toLocaleString('it-IT');
-}
 
 onMounted(async () => {
     await parameters.load();
@@ -55,7 +42,7 @@ onMounted(async () => {
         </div>
 
         <div v-if="store.stats" class="mb-3 flex gap-4 flex-wrap">
-            <span><strong>{{ store.stats.nel_cestino }}</strong> nel cestino ({{ occupati }} MB)</span>
+            <span><strong>{{ store.stats.nel_cestino }}</strong> nel cestino ({{ occupati }})</span>
             <span v-if="store.stats.in_attesa > 0">{{ store.stats.in_attesa }} in attesa di spostamento</span>
             <span>{{ store.stats.eliminati }} eliminati definitivamente</span>
         </div>
@@ -94,7 +81,7 @@ onMounted(async () => {
                 <template #body="{ data }">{{ formatSize(data.file_size) }}</template>
             </Column>
             <Column header="Cestinato il">
-                <template #body="{ data }">{{ formatDate(data.executed) }}</template>
+                <template #body="{ data }">{{ formatDateTime(data.executed) }}</template>
             </Column>
             <Column v-if="store.status === 'done'" header="Giorni rimasti">
                 <template #body="{ data }">

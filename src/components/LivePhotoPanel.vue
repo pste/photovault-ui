@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { api, thumbURL } from '@/plugins/api';
+import { formatSize } from '@/plugins/format';
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -16,7 +17,7 @@ const aperto = ref(false);
 // tutte lo fa dalla griglia, non da un elenco di 525 righe.
 const ANTEPRIME = 12;
 
-const spazio = computed(() => (Number(bytes.value) / (1024 * 1024)).toFixed(0));
+const spazio = computed(() => formatSize(bytes.value));
 const anteprime = computed(() => items.value.slice(0, ANTEPRIME));
 
 async function load() {
@@ -62,7 +63,7 @@ async function cestina() {
                 <div class="live-note">
                     Ogni scatto è sulla share come foto <strong>e</strong> come video di
                     pochi secondi, quindi nella griglia occupa due riquadri.
-                    I video pesano {{ spazio }} MB in tutto.
+                    I video pesano {{ spazio }} in tutto.
                 </div>
             </div>
             <span class="flex-1"></span>

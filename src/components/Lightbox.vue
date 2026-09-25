@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { api, thumbURL, originalURL } from '@/plugins/api';
+import { formatSize, formatDateTime } from '@/plugins/format';
 
 const props = defineProps({
     mediaId: { type: [Number, null], default: null },
@@ -53,21 +54,6 @@ function onKey(event) {
     }
 }
 
-function formatSize(bytes) {
-    if (!bytes) {
-        return '';
-    }
-    const mb = Number(bytes) / (1024 * 1024);
-    return `${mb.toFixed(1)} MB`;
-}
-
-function formatDate(value) {
-    if (!value) {
-        return '';
-    }
-    return new Date(value).toLocaleString('it-IT');
-}
-
 watch(() => props.mediaId, load, { immediate: true });
 
 onMounted(() => window.addEventListener('keydown', onKey));
@@ -93,7 +79,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
             <div v-if="detail" class="lightbox-info">
                 <dl>
                     <dt>Cartella</dt><dd>{{ detail.folder_path }}</dd>
-                    <dt>Scatto</dt><dd>{{ formatDate(detail.capture_ts) }}</dd>
+                    <dt>Scatto</dt><dd>{{ formatDateTime(detail.capture_ts) }}</dd>
                     <dt>Dimensioni</dt>
                     <dd>{{ detail.width }} × {{ detail.height }} — {{ formatSize(detail.file_size) }}</dd>
                     <dt v-if="detail.camera_model">Fotocamera</dt>

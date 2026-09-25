@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { api } from '@/plugins/api';
+import { formatSize } from '@/plugins/format';
 
 const stats = ref(null);
 const others = ref(null);
@@ -96,23 +97,6 @@ function percent(fase) {
 
 function format(n) {
     return Number(n || 0).toLocaleString('it-IT');
-}
-
-// toFixed dà sempre il punto decimale, che in italiano è il separatore delle
-// migliaia: "1.08 TB" accanto a "338.608 media" si legge come mille volte tanto.
-function formatSize(bytes) {
-    const n = Number(bytes || 0);
-    if (n >= 1024 ** 4) {
-        return `${decimali(n / 1024 ** 4, 2)} TB`;
-    }
-    if (n >= 1024 ** 3) {
-        return `${decimali(n / 1024 ** 3, 1)} GB`;
-    }
-    return `${decimali(n / 1024 ** 2, 0)} MB`;
-}
-
-function decimali(n, cifre) {
-    return n.toLocaleString('it-IT', { minimumFractionDigits: cifre, maximumFractionDigits: cifre });
 }
 
 // Il primo caricamento segnala gli errori come ogni altra pagina; gli

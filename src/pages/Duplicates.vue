@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import useDuplicatesStore from '@/stores/duplicates';
 import DupGroupCard from '@/components/DupGroupCard.vue';
 import LivePhotoPanel from '@/components/LivePhotoPanel.vue';
+import { formatSize } from '@/plugins/format';
 
 const store = useDuplicatesStore();
 const toast = useToast();
@@ -20,10 +21,7 @@ const kinds = [
     { label: 'Simili', value: 'similar' },
 ];
 
-const recuperabili = computed(() => {
-    const bytes = Number(store.stats?.bytes_recuperabili || 0);
-    return (bytes / (1024 * 1024)).toFixed(1);
-});
+const recuperabili = computed(() => formatSize(store.stats?.bytes_recuperabili));
 
 const pages = computed(() => Math.ceil(store.total / 20));
 
@@ -72,7 +70,7 @@ onMounted(() => store.load());
 
         <div v-if="store.stats" class="mb-4 flex gap-4 flex-wrap">
             <span><strong>{{ store.stats.aperti }}</strong> gruppi da decidere</span>
-            <span><strong>{{ recuperabili }} MB</strong> recuperabili</span>
+            <span><strong>{{ recuperabili }}</strong> recuperabili</span>
             <span>{{ store.stats.risolti }} risolti · {{ store.stats.ignorati }} ignorati</span>
         </div>
 

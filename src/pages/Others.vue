@@ -4,6 +4,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { otherDownloadURL } from '@/plugins/api';
 import useOthersStore from '@/stores/others';
+import { formatSize, formatDate } from '@/plugins/format';
 
 const store = useOthersStore();
 const confirm = useConfirm();
@@ -24,23 +25,6 @@ const sortOptions = [
 ];
 
 const totalSize = computed(() => formatSize(store.stats?.bytes || 0));
-
-// KB fino a un mega, poi MB, poi GB: su questa pagina convivono file da 2 KB e
-// archivi da qualche giga, e una sola unita' li renderebbe illeggibili.
-function formatSize(bytes) {
-    const n = Number(bytes || 0);
-    if (n >= 1024 * 1024 * 1024) {
-        return `${(n / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-    }
-    if (n >= 1024 * 1024) {
-        return `${(n / (1024 * 1024)).toFixed(1)} MB`;
-    }
-    return `${(n / 1024).toFixed(0)} KB`;
-}
-
-function formatDate(value) {
-    return value ? new Date(value).toLocaleDateString('it-IT') : '';
-}
 
 function confirmTrash() {
     const n = selected.value.length;

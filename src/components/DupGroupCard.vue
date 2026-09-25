@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { thumbURL } from '@/plugins/api';
+import { formatSize, formatDate } from '@/plugins/format';
 
 const props = defineProps({
     group: { type: Object, required: true },
@@ -49,21 +50,6 @@ function trashOthers() {
         rejectLabel: 'Annulla',
         accept: resolve,
     });
-}
-
-function formatSize(bytes) {
-    const mb = Number(bytes) / (1024 * 1024);
-    if (mb < 1) {
-        return `${Math.round(Number(bytes) / 1024)} KB`;
-    }
-    return `${mb.toFixed(1)} MB`;
-}
-
-function formatDate(value) {
-    if (!value) {
-        return '';
-    }
-    return new Date(value).toLocaleDateString('it-IT');
 }
 </script>
 
