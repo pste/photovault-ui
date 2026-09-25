@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { otherDownloadURL } from '@/plugins/api';
@@ -10,6 +10,13 @@ const confirm = useConfirm();
 const toast = useToast();
 
 const selected = ref([]);
+
+// La selezione vale per le righe che si vedono. Prima sopravviveva a cambi di
+// pagina, filtro e ordinamento, e la conferma mostrava solo un numero: si
+// cestinavano anche righe che non erano piu' sullo schermo.
+watch(() => [store.page, store.ext, store.sort], () => {
+    selected.value = [];
+});
 
 const sortOptions = [
     { label: 'Più grandi', value: 'size' },
